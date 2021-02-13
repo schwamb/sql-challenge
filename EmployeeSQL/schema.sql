@@ -1,8 +1,8 @@
-DROP TABLE IF EXISTS departments;
+DROP TABLE IF EXISTS salary;
 DROP TABLE IF EXISTS dept_emp;
 DROP TABLE IF EXISTS dept_manager;
 DROP TABLE IF EXISTS employees;
-DROP TABLE IF EXISTS salary;
+DROP TABLE IF EXISTS departments;
 DROP TABLE IF EXISTS titles;
 
 CREATE TABLE titles (
@@ -30,34 +30,43 @@ CREATE TABLE dept_emp (
 	emp_no integer NOT NULL,
 	dept_no varchar (4) NOT NULL,
 	FOREIGN KEY (emp_no) references employees(emp_no),
-	FOREIGN KEY (dept_no) references departments(dept_no)
+	FOREIGN KEY (dept_no) references departments(dept_no),
+	PRIMARY KEY (emp_no, dept_no)
 );
 
 CREATE TABLE dept_manager (
-	emp_no integer NOT NULL,
 	dept_no varchar (4) NOT NULL,
+	emp_no integer NOT NULL,
 	FOREIGN KEY (emp_no) references employees(emp_no),
-	FOREIGN KEY (dept_no) references departments(dept_no)
+	FOREIGN KEY (dept_no) references departments(dept_no),
+	PRIMARY KEY (emp_no, dept_no)
 );
 
 CREATE TABLE salary (
 	emp_no integer NOT NULL,
     salary integer NOT NULL,
-	FOREIGN KEY (emp_no) references employees(emp_no)
+	FOREIGN KEY (emp_no) references employees(emp_no),
+	PRIMARY KEY (emp_no, salary)
 );
-
-
-
 
 
 --   for something to be a primary key, there must be a foreign key first
 
--- SAMPLE OF CREATING TABLE WITH FOREIGN KEY:
+-- EXAMPLE OF CREATING TABLE WITH FOREIGN KEY:
 -- CREATE TABLE customer_email (
---     id SERIAL,
+--     id SERIAL PRIMARY KEY,
 --     email VARCHAR(30) NOT NULL,
 --     customer_id INTEGER NOT NULL,
---     PRIMARY KEY (id),
 --     FOREIGN KEY (customer_id) REFERENCES customer(id)
 -- );
 -- GENERAL PRACTICE IN POSTGRES TO PUT KEY CONTRAINTS AT THE END
+-- PRIMARY KEY FOR A TABLE CAN BE MULTIPLE KEYS/COLUMNS
+	-- EXAMPLE:
+	-- CREATE TABLE student_courses_junction(
+	-- 	students_id int,
+	-- 	courses_id int,
+	-- 	term varchar (15) NOT NULL,
+	-- 	PRIMARY KEY (students_id, courses_id, term),
+	-- 	FOREIGN KEY (students_id) REFERENCES students(id),
+	-- 	FOREIGN KEY (courses_id) REFERENCES courses(id)
+	-- )
